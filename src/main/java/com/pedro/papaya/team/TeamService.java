@@ -3,31 +3,34 @@ package com.pedro.papaya.team;
 import com.pedro.papaya.sprint.Sprint;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @ApplicationScoped
 public class TeamService {
 
-    private Set<Team> teams = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+    @Inject
+    private EntityManager em;
 
     public TeamService() {
-        this.teams.add(new Team("team 1"));
-        this.teams.add(new Team("team 2"));
     }
 
-    public Set<Team> list() {
-        return teams;
+    public List<Team> list() {
+        TypedQuery<Team> query =
+                em.createNamedQuery("Team.findAll", Team.class);
+        return query.getResultList();
     }
 
-    public Set<Team> add(Team team) {
-        this.teams.add(team);
-        return teams;
+    @Transactional
+    public void add(Team team) {
+        Team t = new Team(team.getName());
+        em.persist(t);
     }
 
-    public Set<Team> delete(Team team) {
-        this.teams.remove(team);
-        return teams;
+    public void delete(Team team) {
+        em.remove(team);
     }
 }
