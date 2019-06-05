@@ -1,31 +1,34 @@
 package com.pedro.papaya.sprint;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @ApplicationScoped
 public class SprintService {
 
-    private Set<Sprint> sprints = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+    @Inject
+    private EntityManager em;
 
     public SprintService() {
-        this.sprints.add(new Sprint("sprint 1"));
-        this.sprints.add(new Sprint("sprint 2"));
     }
 
-    public Set<Sprint> list() {
-        return sprints;
+    public List<Sprint> list() {
+        TypedQuery<Sprint> query =
+                em.createNamedQuery("Sprint.findAll", Sprint.class);
+        return query.getResultList();
     }
 
-    public Set<Sprint> add(Sprint sprint) {
-        this.sprints.add(sprint);
-        return sprints;
+    @Transactional
+    public void add(Sprint sprint) {
+        Sprint sp = new Sprint(sprint.getName(), sprint.getDescription());
+        em.persist(sp);
     }
 
-    public Set<Sprint> delete(Sprint sprint) {
-        this.sprints.remove(sprint);
-        return sprints;
+    public void delete(Sprint sprint) {
+        em.remove(sprint);
     }
 }

@@ -3,6 +3,7 @@ package com.pedro.papaya.sprint;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.Set;
 
 @Path("/sprints")
@@ -11,20 +12,20 @@ import java.util.Set;
 public class SprintResource {
 
     @Inject
-    SprintService service;
+    private SprintService service;
 
     @GET
-    public Set<Sprint> list() {
+    public List<Sprint> list() {
         return service.list();
     }
 
     @POST
-    public Set<Sprint> add(Sprint sprint) {
-        return service.add(sprint);
+    public void add(Sprint sprint) {
+        service.add(sprint);
     }
 
     @DELETE
-    public Set<Sprint> delete(Sprint sprint) {
-        return service.delete(sprint);
+    public void delete(Sprint sprint) {
+        service.delete(sprint);
     }
 }
