@@ -12,3 +12,9 @@ Lancement des tests
 
 https://quarkus.io/guides/getting-started-guide
 https://quarkus.io/guides/building-native-image-guide.html
+
+Installation de la base de données
+
+Installer Postgresqll
+créer la base "papayadb"
+
